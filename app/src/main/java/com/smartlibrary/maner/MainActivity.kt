@@ -183,7 +183,13 @@ fun SmartLibraryApp() {
 
                 // LOGIN BUTTONS
                 Button(
-                    onClick = { },
+                    onClick = {
+    android.widget.Toast.makeText(
+        this@MainActivity,
+        "Student Login खोल रहे हैं...",
+        android.widget.Toast.LENGTH_SHORT
+    ).show()
+},
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),
