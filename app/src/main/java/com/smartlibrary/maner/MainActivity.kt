@@ -3,26 +3,42 @@ package com.smartlibrary.maner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,105 +48,238 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private val SmartRed = Color(0xFFD71920)
+private val SmartBlue = Color(0xFF123A8C)
+private val SmartDarkBlue = Color(0xFF08265F)
+private val SmartLightBlue = Color(0xFFEAF2FF)
+private val SmartLightRed = Color(0xFFFFEEEE)
+private val SmartGold = Color(0xFFFFC107)
+private val SmartWhite = Color.White
+private val SmartText = Color(0xFF172033)
+
 @Composable
 fun SmartLibraryApp() {
-    MaterialTheme {
+
+    val colors = lightColorScheme(
+        primary = SmartRed,
+        secondary = SmartBlue,
+        background = SmartWhite,
+        surface = SmartWhite,
+        onPrimary = SmartWhite,
+        onSecondary = SmartWhite,
+        onBackground = SmartText,
+        onSurface = SmartText
+    )
+
+    MaterialTheme(colorScheme = colors) {
+
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            color = Color(0xFFF7F9FC)
         ) {
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(20.dp),
+                    .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Text(
-                    text = "Smart Library",
-                    style = MaterialTheme.typography.headlineLarge
-                )
-
-                Text(
-                    text = "Maner",
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "पढ़ो आज, संवारो कल",
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Card(
-                    modifier = Modifier.fillMaxWidth()
+                // LOGO
+                Surface(
+                    modifier = Modifier.size(92.dp),
+                    shape = CircleShape,
+                    color = SmartBlue,
+                    shadowElevation = 8.dp
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "📚 Students",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text("Student services")
-                    }
+                    BoxLogo()
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "🔐 Admin",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text("Library management")
-                    }
-                }
+                Text(
+                    text = "SMART LIBRARY",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = SmartRed,
+                    letterSpacing = 1.sp
+                )
+
+                Text(
+                    text = "MANER • PATNA",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SmartBlue
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "पढ़ो आज, संवारो कल",
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = SmartDarkBlue
+                )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Button(
-                    onClick = { }
+                // WELCOME CARD
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = SmartRed
+                    )
                 ) {
-                    Text("Student Login")
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Text(
+                            text = "WELCOME TO SMART LIBRARY",
+                            color = SmartWhite,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = "Study • Practice • Test • Achieve",
+                            color = SmartWhite,
+                            fontSize = 15.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                // STUDENT + ADMIN
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+                    FeatureCard(
+                        modifier = Modifier.weight(1f),
+                        title = "STUDENT",
+                        subtitle = "Study & Tests",
+                        color = SmartBlue
+                    )
+
+                    FeatureCard(
+                        modifier = Modifier.weight(1f),
+                        title = "ADMIN",
+                        subtitle = "Library Management",
+                        color = SmartRed
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                // LOGIN BUTTONS
+                Button(
+                    onClick = { },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = SmartBlue
+                    )
+                ) {
+                    Text(
+                        text = "👤  STUDENT LOGIN",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Button(
-                    onClick = { }
+                OutlinedButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(54.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    border = BorderStroke(2.dp, SmartRed)
                 ) {
-                    Text("Admin Login")
+                    Text(
+                        text = "🔐  ADMIN LOGIN",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = SmartRed
+                    )
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(22.dp))
 
+                // ONLINE TEST
+                ServiceCard(
+                    title = "📝  ONLINE TEST",
+                    subtitle = "Bihar Police • Daroga • BPSC • SSC • Railway • SSC GD",
+                    buttonText = "START TEST",
+                    color = SmartBlue
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // CURRENT AFFAIRS
+                ServiceCard(
+                    title = "📰  DAILY CURRENT AFFAIRS",
+                    subtitle = "Daily MCQ • Important Questions • Answers • Explanation",
+                    buttonText = "VIEW CURRENT AFFAIRS",
+                    color = SmartRed
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // STUDY MATERIAL
+                ServiceCard(
+                    title = "📚  STUDY MATERIAL",
+                    subtitle = "Notes • PDF • Syllabus • Previous Year Questions",
+                    buttonText = "OPEN STUDY MATERIAL",
+                    color = SmartBlue
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                // FACILITIES
                 Card(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = SmartWhite
+                    ),
+                    border = BorderStroke(1.dp, Color(0xFFD9E0EA)),
+                    elevation = CardDefaults.cardElevation(3.dp)
                 ) {
+
                     Column(
                         modifier = Modifier.padding(18.dp)
                     ) {
+
                         Text(
-                            text = "Smart Library Maner",
-                            style = MaterialTheme.typography.titleLarge
+                            text = "SMART LIBRARY MANER",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = SmartBlue
                         )
 
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                        Text("Silent & Educational Environment")
-                        Text("Free Wi-Fi • Locker Facility • R.O. Water")
-                        Text("Separate Sitting Available")
+                        FacilityText("✓ Silent & Educational Environment")
+                        FacilityText("✓ Free Wi-Fi")
+                        FacilityText("✓ Locker Facility")
+                        FacilityText("✓ R.O. Water")
+                        FacilityText("✓ Separate Sitting Available")
+                        FacilityText("✓ News Paper & Magazines")
+                        FacilityText("✓ 24×7 Open")
                     }
                 }
 
@@ -138,9 +287,145 @@ fun SmartLibraryApp() {
 
                 Text(
                     text = "DISCIPLINE TODAY • SUCCESS TOMORROW",
-                    style = MaterialTheme.typography.bodyLarge
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = SmartRed,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Smart Library Maner • Patna, Bihar",
+                    fontSize = 13.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun BoxLogo() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "SL",
+            color = SmartWhite,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+
+        Text(
+            text = "2021",
+            color = SmartGold,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun FeatureCard(
+    modifier: Modifier,
+    title: String,
+    subtitle: String,
+    color: Color
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = color
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(
+                text = title,
+                color = SmartWhite,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = subtitle,
+                color = SmartWhite,
+                fontSize = 13.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun ServiceCard(
+    title: String,
+    subtitle: String,
+    buttonText: String,
+    color: Color
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = SmartWhite
+        ),
+        border = BorderStroke(2.dp, color),
+        elevation = CardDefaults.cardElevation(3.dp)
+    ) {
+
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+
+            Text(
+                text = title,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = color
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = subtitle,
+                fontSize = 14.sp,
+                color = SmartText
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = { },
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = color
+                )
+            ) {
+                Text(
+                    text = buttonText,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
     }
+}
+
+@Composable
+fun FacilityText(text: String) {
+    Text(
+        text = text,
+        modifier = Modifier.padding(vertical = 4.dp),
+        fontSize = 15.sp,
+        color = SmartText
+    )
 }
