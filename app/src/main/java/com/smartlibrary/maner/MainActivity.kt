@@ -1,5 +1,7 @@
 package com.smartlibrary.maner
 
+import androidx.compose.ui.platform.LocalContext
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -59,7 +61,7 @@ private val SmartText = Color(0xFF172033)
 
 @Composable
 fun SmartLibraryApp() {
-
+    val context = LocalContext.current
     val colors = lightColorScheme(
         primary = SmartRed,
         secondary = SmartBlue,
