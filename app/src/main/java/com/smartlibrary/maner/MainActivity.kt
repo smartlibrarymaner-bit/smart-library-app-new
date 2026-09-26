@@ -187,7 +187,7 @@ fun SmartLibraryApp() {
                 Button(
                     onClick = {
     android.widget.Toast.makeText(
-        this@MainActivity,
+        context,
         "Student Login खोल रहे हैं...",
         android.widget.Toast.LENGTH_SHORT
     ).show()
