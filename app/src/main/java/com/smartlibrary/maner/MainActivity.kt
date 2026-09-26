@@ -3,38 +3,14 @@ package com.smartlibrary.maner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,698 +19,778 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-class MainActivity : ComponentActivity() {
+private val Red = Color(0xFFD71920)
+private val Blue = Color(0xFF123A8C)
+private val Green = Color(0xFF16A34A)
+private val Purple = Color(0xFF7C3AED)
+private val Orange = Color(0xFFF97316)
+private val Pink = Color(0xFFDB2777)
+private val Gold = Color(0xFFFFC107)
+private val White = Color.White
+private val TextDark = Color(0xFF172033)
 
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             SmartLibraryApp()
         }
     }
 }
 
-/* ================= COLORS ================= */
-
-private val SmartRed = Color(0xFFD71920)
-private val SmartBlue = Color(0xFF123A8C)
-private val SmartDarkBlue = Color(0xFF08265F)
-private val SmartLightBlue = Color(0xFFEAF2FF)
-private val SmartLightRed = Color(0xFFFFEEEE)
-private val SmartGold = Color(0xFFFFC107)
-private val SmartText = Color(0xFF172033)
-private val SmartWhite = Color.White
-
-/* ================= APP ================= */
+enum class Page {
+    HOME,
+    STUDENT_LOGIN,
+    STUDENT_DASHBOARD,
+    ADMIN_LOGIN,
+    ADMIN_DASHBOARD,
+    TEST,
+    CURRENT_AFFAIRS,
+    STUDY
+}
 
 @Composable
 fun SmartLibraryApp() {
-
-    var screen by remember { mutableStateOf("HOME") }
-
-    var showStudentLogin by remember { mutableStateOf(false) }
-    var showAdminLogin by remember { mutableStateOf(false) }
-
-    var studentId by remember { mutableStateOf("") }
-    var studentPassword by remember { mutableStateOf("") }
-
-    var adminId by remember { mutableStateOf("") }
-    var adminPassword by remember { mutableStateOf("") }
+    var page by remember { mutableStateOf(Page.HOME) }
 
     MaterialTheme {
-
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = Color(0xFFF7F9FC)
         ) {
-
-            when (screen) {
-
-                "HOME" -> HomeScreen(
-                    onStudentLogin = {
-                        showStudentLogin = true
-                    },
-                    onAdminLogin = {
-                        showAdminLogin = true
-                    },
-                    onStudent = {
-                        screen = "STUDENT"
-                    },
-                    onAdmin = {
-                        screen = "ADMIN"
-                    },
-                    onTest = {
-                        screen = "TEST"
-                    },
-                    onCurrentAffairs = {
-                        screen = "CURRENT"
-                    },
-                    onStudyMaterial = {
-                        screen = "STUDY"
-                    }
+            when (page) {
+                Page.HOME -> Home(
+                    student = { page = Page.STUDENT_LOGIN },
+                    admin = { page = Page.ADMIN_LOGIN },
+                    test = { page = Page.TEST },
+                    current = { page = Page.CURRENT_AFFAIRS },
+                    study = { page = Page.STUDY }
                 )
 
-                "STUDENT" -> StudentDashboard(
-                    onBack = {
-                        screen = "HOME"
-                    },
-                    onTest = {
-                        screen = "TEST"
-                    },
-                    onCurrent = {
-                        screen = "CURRENT"
-                    },
-                    onStudy = {
-                        screen = "STUDY"
-                    }
+                Page.STUDENT_LOGIN -> StudentLogin(
+                    back = { page = Page.HOME },
+                    login = { page = Page.STUDENT_DASHBOARD }
                 )
 
-                "ADMIN" -> AdminDashboard(
-                    onBack = {
-                        screen = "HOME"
-                    }
+                Page.STUDENT_DASHBOARD -> StudentDashboard(
+                    back = { page = Page.HOME },
+                    test = { page = Page.TEST },
+                    current = { page = Page.CURRENT_AFFAIRS },
+                    study = { page = Page.STUDY }
                 )
 
-                "TEST" -> TestScreen(
-                    onBack = {
-                        screen = "HOME"
-                    }
+                Page.ADMIN_LOGIN -> AdminLogin(
+                    back = { page = Page.HOME },
+                    login = { page = Page.ADMIN_DASHBOARD }
                 )
 
-                "CURRENT" -> CurrentAffairsScreen(
-                    onBack = {
-                        screen = "HOME"
-                    }
+                Page.ADMIN_DASHBOARD -> AdminDashboard(
+                    back = { page = Page.HOME }
                 )
 
-                "STUDY" -> StudyMaterialScreen(
-                    onBack = {
-                        screen = "HOME"
-                    }
+                Page.TEST -> TestScreen(
+                    back = { page = Page.HOME }
+                )
+
+                Page.CURRENT_AFFAIRS -> CurrentAffairs(
+                    back = { page = Page.HOME }
+                )
+
+                Page.STUDY -> StudyMaterial(
+                    back = { page = Page.HOME }
                 )
             }
-        }
-
-        /* ================= STUDENT LOGIN ================= */
-
-        if (showStudentLogin) {
-
-            AlertDialog(
-                onDismissRequest = {
-                    showStudentLogin = false
-                },
-
-                title = {
-                    Text(
-                        text = "👤 STUDENT LOGIN",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = SmartBlue
-                    )
-                },
-
-                text = {
-
-                    Column {
-
-                        OutlinedTextField(
-                            value = studentId,
-                            onValueChange = {
-                                studentId = it
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            label = {
-                                Text("Student ID")
-                            },
-                            singleLine = true
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(12.dp)
-                        )
-
-                        OutlinedTextField(
-                            value = studentPassword,
-                            onValueChange = {
-                                studentPassword = it
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            label = {
-                                Text("Password")
-                            },
-                            singleLine = true
-                        )
-                    }
-                },
-
-                confirmButton = {
-
-                    Button(
-                        onClick = {
-
-                            showStudentLogin = false
-                            screen = "STUDENT"
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = SmartBlue
-                        )
-                    ) {
-                        Text("LOGIN")
-                    }
-                },
-
-                dismissButton = {
-
-                    TextButton(
-                        onClick = {
-                            showStudentLogin = false
-                        }
-                    ) {
-                        Text(
-                            "CLOSE",
-                            color = SmartRed
-                        )
-                    }
-                }
-            )
-        }
-
-        /* ================= ADMIN LOGIN ================= */
-
-        if (showAdminLogin) {
-
-            AlertDialog(
-                onDismissRequest = {
-                    showAdminLogin = false
-                },
-
-                title = {
-                    Text(
-                        text = "🔐 ADMIN LOGIN",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = SmartRed
-                    )
-                },
-
-                text = {
-
-                    Column {
-
-                        OutlinedTextField(
-                            value = adminId,
-                            onValueChange = {
-                                adminId = it
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            label = {
-                                Text("Admin ID")
-                            },
-                            singleLine = true
-                        )
-
-                        Spacer(
-                            modifier = Modifier.height(12.dp)
-                        )
-
-                        OutlinedTextField(
-                            value = adminPassword,
-                            onValueChange = {
-                                adminPassword = it
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            label = {
-                                Text("Password")
-                            },
-                            singleLine = true
-                        )
-                    }
-                },
-
-                confirmButton = {
-
-                    Button(
-                        onClick = {
-
-                            showAdminLogin = false
-                            screen = "ADMIN"
-
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = SmartRed
-                        )
-                    ) {
-                        Text("LOGIN")
-                    }
-                },
-
-                dismissButton = {
-
-                    TextButton(
-                        onClick = {
-                            showAdminLogin = false
-                        }
-                    ) {
-                        Text(
-                            "CLOSE",
-                            color = SmartBlue
-                        )
-                    }
-                }
-            )
         }
     }
 }
 
-/* ================= HOME SCREEN ================= */
-
 @Composable
-fun HomeScreen(
-    onStudentLogin: () -> Unit,
-    onAdminLogin: () -> Unit,
-    onStudent: () -> Unit,
-    onAdmin: () -> Unit,
-    onTest: () -> Unit,
-    onCurrentAffairs: () -> Unit,
-    onStudyMaterial: () -> Unit
-) {
-
+fun ScreenColumn(content: @Composable ColumnScope.() -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        content = content
+    )
+}
+
+@Composable
+fun Logo() {
+    Card(
+        modifier = Modifier.size(100.dp),
+        shape = RoundedCornerShape(50.dp),
+        colors = CardDefaults.cardColors(containerColor = Blue),
+        elevation = CardDefaults.cardElevation(8.dp)
     ) {
-
-        Box(
-            modifier = Modifier
-                .size(92.dp)
-                .background(
-                    SmartBlue,
-                    RoundedCornerShape(50.dp)
-                ),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
+            Text(
+                "SL",
+                color = White,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+            Text(
+                "2021",
+                color = Gold,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
+@Composable
+fun Header(
+    title: String,
+    back: (() -> Unit)? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (back != null) {
+            TextButton(onClick = back) {
                 Text(
-                    text = "SL",
-                    color = SmartWhite,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-
-                Text(
-                    text = "2021",
-                    color = SmartGold,
-                    fontSize = 10.sp,
+                    "‹",
+                    fontSize = 36.sp,
+                    color = Blue,
                     fontWeight = FontWeight.Bold
                 )
             }
         }
 
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                title,
+                fontSize = 23.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = Red
+            )
+            Text(
+                "SMART LIBRARY MANER",
+                fontSize = 11.sp,
+                color = Blue,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+@Composable
+fun Home(
+    student: () -> Unit,
+    admin: () -> Unit,
+    test: () -> Unit,
+    current: () -> Unit,
+    study: () -> Unit
+) {
+    ScreenColumn {
+
+        Logo()
+
+        Spacer(Modifier.height(12.dp))
 
         Text(
-            text = "SMART LIBRARY",
+            "SMART LIBRARY",
             fontSize = 30.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = SmartRed
+            color = Red
         )
 
         Text(
-            text = "MANER • PATNA",
-            fontSize = 16.sp,
+            "MANER • PATNA",
+            fontSize = 17.sp,
             fontWeight = FontWeight.Bold,
-            color = SmartBlue
+            color = Blue
         )
 
-        Spacer(
-            modifier = Modifier.height(8.dp)
-        )
+        Spacer(Modifier.height(5.dp))
 
         Text(
-            text = "पढ़ो आज, संवारो कल",
-            fontSize = 22.sp,
+            "पढ़ो आज, संवारो कल",
+            fontSize = 21.sp,
             fontWeight = FontWeight.Bold,
-            color = SmartBlue
+            color = Blue
         )
 
-        Spacer(
-            modifier = Modifier.height(18.dp)
-        )
+        Spacer(Modifier.height(16.dp))
 
-        ServiceCard(
-            title = "WELCOME TO SMART LIBRARY",
-            subtitle = "Study • Practice • Test • Achieve",
-            buttonText = "OPEN STUDENT AREA",
-            color = SmartRed,
-            onClick = onStudent
-        )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(22.dp),
+            colors = CardDefaults.cardColors(containerColor = Red)
+        ) {
+            Column(
+                modifier = Modifier.padding(22.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    "WELCOME TO SMART LIBRARY",
+                    color = White,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Center
+                )
 
-        Spacer(
-            modifier = Modifier.height(16.dp)
-        )
+                Spacer(Modifier.height(8.dp))
+
+                Text(
+                    "Study • Practice • Test • Achieve",
+                    color = White,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        Spacer(Modifier.height(15.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
-            FeatureCard(
+            SmallCard(
                 modifier = Modifier.weight(1f),
-                title = "STUDENT",
+                title = "🎓 STUDENT",
                 subtitle = "Study & Tests",
-                color = SmartBlue,
-                onClick = onStudent
+                color = Blue,
+                click = student
             )
 
-            FeatureCard(
+            SmallCard(
                 modifier = Modifier.weight(1f),
-                title = "ADMIN",
+                title = "🔐 ADMIN",
                 subtitle = "Library Management",
-                color = SmartRed,
-                onClick = onAdmin
+                color = Red,
+                click = admin
             )
         }
 
-        Spacer(
-            modifier = Modifier.height(18.dp)
+        Spacer(Modifier.height(12.dp))
+
+        MainButton(
+            "👤  STUDENT LOGIN",
+            Blue,
+            student
         )
 
-        Button(
-            onClick = onStudentLogin,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = SmartBlue
-            )
-        ) {
+        Spacer(Modifier.height(10.dp))
 
-            Text(
-                text = "👤  STUDENT LOGIN",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(10.dp)
+        OutlineButton(
+            "🔐  ADMIN LOGIN",
+            Red,
+            admin
         )
 
-        OutlinedButton(
-            onClick = onAdminLogin,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(14.dp)
-        ) {
+        Spacer(Modifier.height(16.dp))
 
-            Text(
-                text = "🔐  ADMIN LOGIN",
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                color = SmartRed
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.height(18.dp)
-        )
-
-        ServiceCard(
-            title = "📝 ONLINE TEST",
+        Service(
+            title = "📝  ONLINE TEST",
             subtitle = "Bihar Police • Daroga • BPSC • SSC • Railway • SSC GD",
-            buttonText = "START TEST",
-            color = SmartBlue,
-            onClick = onTest
+            button = "START TEST",
+            color = Blue,
+            click = test
         )
 
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
+        Spacer(Modifier.height(12.dp))
 
-        ServiceCard(
-            title = "📰 DAILY CURRENT AFFAIRS",
+        Service(
+            title = "📰  DAILY CURRENT AFFAIRS",
             subtitle = "Daily MCQ • Important Questions • Answers • Explanation",
-            buttonText = "VIEW CURRENT AFFAIRS",
-            color = SmartRed,
-            onClick = onCurrentAffairs
+            button = "VIEW CURRENT AFFAIRS",
+            color = Red,
+            click = current
         )
 
-        Spacer(
-            modifier = Modifier.height(12.dp)
-        )
+        Spacer(Modifier.height(12.dp))
 
-        ServiceCard(
-            title = "📚 STUDY MATERIAL",
+        Service(
+            title = "📚  STUDY MATERIAL",
             subtitle = "Notes • PDF • Syllabus • Previous Year Questions",
-            buttonText = "OPEN STUDY MATERIAL",
-            color = SmartBlue,
-            onClick = onStudyMaterial
+            button = "OPEN STUDY MATERIAL",
+            color = Blue,
+            click = study
         )
 
-        Spacer(
-            modifier = Modifier.height(18.dp)
-        )
+        Spacer(Modifier.height(16.dp))
 
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = SmartWhite
-            ),
-            shape = RoundedCornerShape(20.dp)
+            colors = CardDefaults.cardColors(containerColor = White),
+            border = BorderStroke(1.dp, Color.LightGray)
         ) {
-
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-
+            Column(Modifier.padding(16.dp)) {
                 Text(
-                    text = "SMART LIBRARY FACILITIES",
-                    fontSize = 20.sp,
+                    "SMART LIBRARY FACILITIES",
+                    fontSize = 19.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = SmartRed
+                    color = Red
                 )
 
-                FacilityText("✓ Silent & Educational Environment")
-                FacilityText("✓ Free Wi-Fi")
-                FacilityText("✓ Locker Facility")
-                FacilityText("✓ R.O. Water")
-                FacilityText("✓ Separate Sitting Available")
-                FacilityText("✓ News Paper & Magazines")
-                FacilityText("✓ 24×7 Open")
+                Facility("✓ Silent & Educational Environment")
+                Facility("✓ Free Wi-Fi")
+                Facility("✓ Locker Facility")
+                Facility("✓ R.O. Water")
+                Facility("✓ Separate Sitting Available")
+                Facility("✓ News Paper & Magazines")
+                Facility("✓ 24×7 Open")
             }
         }
 
-        Spacer(
-            modifier = Modifier.height(20.dp)
-        )
+        Spacer(Modifier.height(18.dp))
 
         Text(
-            text = "DISCIPLINE TODAY • SUCCESS TOMORROW",
+            "DISCIPLINE TODAY • SUCCESS TOMORROW",
             fontSize = 15.sp,
             fontWeight = FontWeight.ExtraBold,
-            color = SmartRed,
+            color = Red,
             textAlign = TextAlign.Center
-        )
-
-        Spacer(
-            modifier = Modifier.height(8.dp)
         )
 
         Text(
-            text = "Smart Library Maner • Patna, Bihar",
+            "Smart Library Maner • Patna, Bihar",
             fontSize = 13.sp,
-            color = Color.Gray,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(
-            modifier = Modifier.height(20.dp)
+            color = Color.Gray
         )
     }
 }
 
-/* ================= STUDENT DASHBOARD ================= */
+@Composable
+fun SmallCard(
+    modifier: Modifier,
+    title: String,
+    subtitle: String,
+    color: Color,
+    click: () -> Unit
+) {
+    Card(
+        modifier = modifier.clickable { click() },
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = color)
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text(
+                title,
+                color = White,
+                fontSize = 19.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                subtitle,
+                color = White,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun MainButton(
+    text: String,
+    color: Color,
+    click: () -> Unit
+) {
+    Button(
+        onClick = click,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(14.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = color
+        )
+    ) {
+        Text(
+            text,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun OutlineButton(
+    text: String,
+    color: Color,
+    click: () -> Unit
+) {
+    OutlinedButton(
+        onClick = click,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(14.dp),
+        border = BorderStroke(2.dp, color)
+    ) {
+        Text(
+            text,
+            color = color,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+fun Service(
+    title: String,
+    subtitle: String,
+    button: String,
+    color: Color,
+    click: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = White),
+        border = BorderStroke(2.dp, color),
+        elevation = CardDefaults.cardElevation(3.dp)
+    ) {
+        Column(Modifier.padding(16.dp)) {
+
+            Text(
+                title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = color
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                subtitle,
+                fontSize = 14.sp,
+                color = TextDark,
+                lineHeight = 22.sp
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            Button(
+                onClick = click,
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = color
+                )
+            ) {
+                Text(
+                    button,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun Facility(text: String) {
+    Text(
+        text,
+        modifier = Modifier.padding(vertical = 5.dp),
+        fontSize = 15.sp,
+        color = TextDark
+    )
+}
+
+@Composable
+fun StudentLogin(
+    back: () -> Unit,
+    login: () -> Unit
+) {
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    ScreenColumn {
+
+        Header("Student Login", back)
+
+        Logo()
+
+        Spacer(Modifier.height(12.dp))
+
+        Text(
+            "Student Login",
+            fontSize = 26.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Blue
+        )
+
+        Text("अपने Account से Login करें")
+
+        Spacer(Modifier.height(20.dp))
+
+        OutlinedTextField(
+            value = id,
+            onValueChange = { id = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text("Admission No. / Mobile No.")
+            },
+            singleLine = true
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text("Password")
+            },
+            singleLine = true
+        )
+
+        Spacer(Modifier.height(18.dp))
+
+        MainButton(
+            "LOGIN",
+            Blue,
+            login
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        TextButton(onClick = {}) {
+            Text(
+                "Forgot Password?",
+                color = Blue
+            )
+        }
+
+        OutlineButton(
+            "👤  NEW STUDENT REGISTRATION",
+            Blue
+        ) {}
+    }
+}
+
+@Composable
+fun AdminLogin(
+    back: () -> Unit,
+    login: () -> Unit
+) {
+    var id by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    ScreenColumn {
+
+        Header("Admin Login", back)
+
+        Spacer(Modifier.height(20.dp))
+
+        Text(
+            "🔐  ADMIN LOGIN",
+            fontSize = 27.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Red
+        )
+
+        Spacer(Modifier.height(20.dp))
+
+        OutlinedTextField(
+            value = id,
+            onValueChange = { id = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text("Admin ID")
+            },
+            singleLine = true
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text("Password")
+            },
+            singleLine = true
+        )
+
+        Spacer(Modifier.height(18.dp))
+
+        MainButton(
+            "OPEN ADMIN MANAGEMENT",
+            Red,
+            login
+        )
+
+        Spacer(Modifier.height(20.dp))
+
+        Text(
+            "Students, Admission, Payment, Tests और Library Management यहाँ से किया जा सकेगा।",
+            fontSize = 15.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
 
 @Composable
 fun StudentDashboard(
-    onBack: () -> Unit,
-    onTest: () -> Unit,
-    onCurrent: () -> Unit,
-    onStudy: () -> Unit
+    back: () -> Unit,
+    test: () -> Unit,
+    current: () -> Unit,
+    study: () -> Unit
 ) {
+    ScreenColumn {
 
-    AppPage(
-        title = "👨‍🎓 STUDENT DASHBOARD",
-        onBack = onBack
-    ) {
+        Header("Student Dashboard", back)
 
-        DashboardCard(
-            "📝 ONLINE TEST",
-            "Practice Bihar Police, Daroga, BPSC, SSC, Railway & SSC GD",
-            SmartBlue,
-            onTest
-        )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = White),
+            border = BorderStroke(1.dp, Color.LightGray)
+        ) {
+            Column(Modifier.padding(16.dp)) {
 
-        DashboardCard(
-            "📰 CURRENT AFFAIRS",
-            "Daily MCQ, important questions and explanations",
-            SmartRed,
-            onCurrent
-        )
+                Text(
+                    "🎓  STUDENT PROFILE",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Blue
+                )
 
-        DashboardCard(
-            "📚 STUDY MATERIAL",
-            "Notes, syllabus and previous year questions",
-            SmartBlue,
-            onStudy
-        )
+                Spacer(Modifier.height(8.dp))
 
-        DashboardCard(
-            "📊 MY PROGRESS",
-            "Test result and preparation progress",
-            SmartRed
-        )
+                Text("Name: Student")
+                Text("Admission No.: SL001")
+                Text("Shift: Morning")
+                Text("Locker: L-12")
+            }
+        }
+
+        Spacer(Modifier.height(12.dp))
+
+        Tile("📝", "Online Test", Blue, test)
+        Tile("📰", "Current Affairs", Red, current)
+        Tile("📚", "Study Material", Green, study)
+        Tile("📊", "My Result", Orange) {}
+        Tile("🔔", "Library Notice", Purple) {}
+        Tile("💰", "Fees & Payment", Pink) {}
+        Tile("🔒", "Locker Info", Orange) {}
+        Tile("👤", "Profile", Blue) {}
     }
 }
 
-/* ================= ADMIN DASHBOARD ================= */
-
 @Composable
-fun AdminDashboard(
-    onBack: () -> Unit
-) {
+fun AdminDashboard(back: () -> Unit) {
+    ScreenColumn {
 
-    AppPage(
-        title = "🛠️ ADMIN • LIBRARY MANAGEMENT",
-        onBack = onBack
-    ) {
+        Header("Admin • Library Management", back)
 
-        DashboardCard(
-            "👨‍🎓 STUDENT MANAGEMENT",
-            "Students admission, student records and profile",
-            SmartBlue
+        Text(
+            "🛠️  ADMIN • LIBRARY MANAGEMENT",
+            fontSize = 23.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Blue,
+            textAlign = TextAlign.Center
         )
 
-        DashboardCard(
-            "📝 ADMISSION",
-            "New admission and admission records",
-            SmartRed
-        )
+        Spacer(Modifier.height(16.dp))
 
-        DashboardCard(
-            "💳 PAYMENT MANAGEMENT",
-            "Paid, due, payment date and payment records",
-            SmartBlue
-        )
-
-        DashboardCard(
-            "🔐 LOGIN MANAGEMENT",
-            "Student ID, Admin ID and account management",
-            SmartRed
-        )
-
-        DashboardCard(
-            "📝 TEST MANAGEMENT",
-            "Create tests, questions, answers and results",
-            SmartBlue
-        )
-
-        DashboardCard(
-            "📚 LIBRARY MANAGEMENT",
-            "Library facilities and student management",
-            SmartRed
-        )
-
-        DashboardCard(
-            "📊 REPORTS",
-            "Admission, payment and test reports",
-            SmartBlue
-        )
+        Tile("👨‍🎓", "Students Management", Blue) {}
+        Tile("📝", "Admission Management", Red) {}
+        Tile("💳", "Payment & Due Management", Green) {}
+        Tile("🧪", "Test Management", Purple) {}
+        Tile("📚", "Study Material Management", Orange) {}
+        Tile("📰", "Current Affairs Management", Pink) {}
+        Tile("🔐", "Locker Management", Blue) {}
+        Tile("📢", "Library Notice", Red) {}
     }
 }
 
-/* ================= TEST ================= */
-
 @Composable
-fun TestScreen(
-    onBack: () -> Unit
+fun Tile(
+    icon: String,
+    title: String,
+    color: Color,
+    click: () -> Unit
 ) {
-
-    AppPage(
-        title = "📝 ONLINE TEST",
-        onBack = onBack
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp)
+            .clickable { click() },
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = color
+        )
     ) {
+        Row(
+            modifier = Modifier.padding(18.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-        DashboardCard(
-            "BIHAR POLICE",
-            "Practice questions",
-            SmartBlue
-        )
+            Text(
+                icon,
+                fontSize = 28.sp
+            )
 
-        DashboardCard(
-            "BIHAR DAROGA",
-            "Practice questions",
-            SmartRed
-        )
+            Spacer(Modifier.width(14.dp))
 
-        DashboardCard(
-            "BPSC",
-            "Practice questions",
-            SmartBlue
-        )
-
-        DashboardCard(
-            "SSC / SSC GD",
-            "Practice questions",
-            SmartRed
-        )
-
-        DashboardCard(
-            "RAILWAY",
-            "Practice questions",
-            SmartBlue
-        )
+            Text(
+                title,
+                color = White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
-/* ================= CURRENT AFFAIRS ================= */
-
 @Composable
-fun CurrentAffairsScreen(
-    onBack: () -> Unit
-) {
+fun TestScreen(back: () -> Unit) {
+    ScreenColumn {
 
-    AppPage(
-        title = "📰 DAILY CURRENT 
+        Header("Online Test", back)
+
+        Text(
+            "ONLINE TEST",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = Red
+        )
+
+        Text("अपनी परीक्षा चुनें")
+
+        Spacer(Modifier.height(16.dp))
+
+        val tests = listOf(
+            "👮 Bihar Police Practice Test",
+            "🛡️ Bihar Daroga Test",
+            "📋 BPSC Test",
+            "🟢 SSC GD Test",
+            "🚆 Railway Test",
+            "🌐 General Awareness Test",
+            "📚 Current Affairs Quiz"
+        )
+
+        tests.forEach { test ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp)
+                    .clickable {},
+                colors = CardDefaults.cardColors(
+                    containerColor = White
+                ),
+                border = BorderStroke(1.dp, Blue)
+            ) {
+                Row(
+                    modifier = Modifier.padding(17.dp),
+                 
