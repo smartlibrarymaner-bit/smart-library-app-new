@@ -793,4 +793,24 @@ fun TestScreen(back: () -> Unit) {
             ) {
                 Row(
                     modifier = Modifier.padding(17.dp),
-                 
+                 verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        item,
+                        modifier = Modifier.weight(1f),
+                        color = Blue,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        "›",
+                        color = Blue,
+                        fontSize = 28.sp
+                    )
+                }
+            }
+        }
+    }
+}
