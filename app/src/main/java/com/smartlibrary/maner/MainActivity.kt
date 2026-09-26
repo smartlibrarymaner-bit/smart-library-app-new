@@ -1,7 +1,11 @@
 package com.smartlibrary.maner
 
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalContex
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -62,6 +66,7 @@ private val SmartText = Color(0xFF172033)
 @Composable
 fun SmartLibraryApp() {
     val context = LocalContext.current
+    var showStudentLogin by remember { mutableStateOf(false) }
     val colors = lightColorScheme(
         primary = SmartRed,
         secondary = SmartBlue,
@@ -186,11 +191,7 @@ fun SmartLibraryApp() {
                 // LOGIN BUTTONS
                 Button(
                     onClick = {
-    android.widget.Toast.makeText(
-        context,
-        "Student Login खोल रहे हैं...",
-        android.widget.Toast.LENGTH_SHORT
-    ).show()
+    showStudentLogin = true
 },
                     modifier = Modifier
                         .fillMaxWidth()
