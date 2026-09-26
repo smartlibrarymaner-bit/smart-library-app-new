@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "501479658713",
+    "project_id": "smart-library-f059f",
+    "storage_bucket": "smart-library-f059f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501479658713:android:c29fbbef9e15ee946ddac8",
+        "android_client_info": {
+          "package_name": "com.smartlibrary.maner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFLmQj9TeiwIg2o_WAAUcM2rywRBs2BqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
