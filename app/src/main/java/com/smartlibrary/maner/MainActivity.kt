@@ -5,13 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -67,32 +65,35 @@ fun SmartLibraryApp() {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                Card(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Card(
-                        modifier = Modifier.weight(1f)
+                    Column(
+                        modifier = Modifier.padding(16.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text("📚 Students")
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text("Student services")
-                        }
+                        Text(
+                            text = "📚 Students",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Student services")
                     }
+                }
 
-                    Card(
-                        modifier = Modifier.weight(1f)
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text("🔐 Admin")
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text("Library management")
-                        }
+                        Text(
+                            text = "🔐 Admin",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Library management")
                     }
                 }
 
@@ -124,7 +125,9 @@ fun SmartLibraryApp() {
                             text = "Smart Library Maner",
                             style = MaterialTheme.typography.titleLarge
                         )
+
                         Spacer(modifier = Modifier.height(8.dp))
+
                         Text("Silent & Educational Environment")
                         Text("Free Wi-Fi • Locker Facility • R.O. Water")
                         Text("Separate Sitting Available")
